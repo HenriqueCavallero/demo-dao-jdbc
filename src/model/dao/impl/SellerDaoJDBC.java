@@ -76,8 +76,8 @@ public class SellerDaoJDBC implements SellerDao {
 			st.setDouble(4, obj.getBaseSalary());
 			st.setInt(5, obj.getDeparment().getId());
 			st.setInt(6, obj.getId());
-
-			int rowsAffected = st.executeUpdate();
+			
+			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
@@ -88,15 +88,14 @@ public class SellerDaoJDBC implements SellerDao {
 	@Override
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
-		
 		try {
 			st = conn.prepareStatement("DELETE FROM seller WHERE Id = ?");
 			
 			st.setInt(1, id);
-			
 			int rowsAffected = st.executeUpdate();
+			
 			if (rowsAffected == 0) {
-				throw new DbException("The saller does not exist!");
+				throw new DbException("Error! The saller does not exist!");
 			}
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -117,6 +116,7 @@ public class SellerDaoJDBC implements SellerDao {
 					+ "ON seller.DepartmentId = department.Id " 
 					+ "WHERE seller.Id = ?");
 			st.setInt(1, id);
+			
 			rs = st.executeQuery();
 
 			if (rs.next()) {
@@ -200,6 +200,7 @@ public class SellerDaoJDBC implements SellerDao {
 					+ "WHERE DepartmentId = ? " 
 					+ "ORDER BY Name");
 			st.setInt(1, department.getId());
+			
 			rs = st.executeQuery();
 
 			List<Seller> list = new ArrayList<>();
